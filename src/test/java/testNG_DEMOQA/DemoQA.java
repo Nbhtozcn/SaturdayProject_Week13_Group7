@@ -4,6 +4,7 @@ import Utilities.UtilityClass;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.interactions.Action;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -53,6 +54,20 @@ public class DemoQA extends UtilityClass {
     }
     @Test
     void testID5(){
+        driver.get("https://demoqa.com/selectable/");
+
+        WebElement selectFirst = driver.findElement(By.xpath("//li[text()='Cras justo odio']"));
+        String colorBeforeSelect = selectFirst.getCssValue("background-color");
+        System.out.println("Color before selection: " + colorBeforeSelect);
+
+        selectFirst.click();
+
+        String colorAfterSelect = selectFirst.getCssValue("background-color");
+        System.out.println("Color after selection: " + colorAfterSelect);
+
+        Assert.assertNotEquals(colorAfterSelect,colorBeforeSelect, "Test is not successful");
+
+        quitDriver(3);
 
     }
     @Test
@@ -106,6 +121,39 @@ public class DemoQA extends UtilityClass {
     }
     @Test
     void testID10(){
+        driver.get("https://demoqa.com/resizable/");
+
+        WebElement resizableBox = driver.findElement(By.id("resizableBoxWithRestriction"));
+
+        String beforeResize = resizableBox.getAttribute("style");
+        System.out.println("Before resize: " + beforeResize);
+
+        int beforeWidth = resizableBox.getSize().getWidth();
+        int beforeHeight = resizableBox.getSize().getHeight();
+
+
+        WebElement dragPoint = driver.findElement(By.xpath("//div[@id='resizableBoxWithRestriction']//span"));
+
+        Actions actions = new Actions(driver);
+
+        Action resizeDiagonally = actions.moveToElement(dragPoint).clickAndHold().moveByOffset(-50,-50).release().build();
+        resizeDiagonally.perform();
+
+
+        String afterResize = resizableBox.getAttribute("style");
+        System.out.println("After resize: " + afterResize);
+
+        int afterWidth = resizableBox.getSize().getWidth();
+        int afterHeight = resizableBox.getSize().getHeight();
+
+        int expectedWidth = 150;
+        int expectedHeight = 150;
+
+        Assert.assertEquals(afterHeight,expectedHeight, "The test is not successful");
+        Assert.assertEquals(afterWidth,expectedWidth, "The test is not successful");
+
+        quitDriver(3);
+
 
     }
     @Test

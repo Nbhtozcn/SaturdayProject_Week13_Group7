@@ -113,6 +113,21 @@ public class DemoQA extends UtilityClass {
     }
     @Test
     void testID8(){
+        driver.get("https://demoqa.com/resizable/");
+        WebElement resizableBox= driver.findElement(By.id("resizableBoxWithRestriction"));
+        Dimension dim = resizableBox.getSize();
+        int beforeResizeWidth=dim.getWidth();
+        wait(5);
+
+        Actions actions=new Actions(driver);
+        WebElement dragPoint= driver.findElement(By.cssSelector(".react-resizable-handle.react-resizable-handle-se"));
+        Action resize = actions.clickAndHold(dragPoint).moveByOffset(100, 0).release().build();
+        resize.perform();
+
+        wait(5);
+        Dimension dim2 = resizableBox.getSize();
+        int afterResizeWidth=dim2.getWidth();
+        Assert.assertEquals(beforeResizeWidth+100,afterResizeWidth);
 
     }
     @Test
@@ -209,6 +224,15 @@ public class DemoQA extends UtilityClass {
     }
     @Test
     void testID14(){
+        driver.get("https://demoqa.com/slider/");
+        //Locate the point
+        WebElement slider= driver.findElement(By.xpath("//input[@class='range-slider range-slider--primary']"));
+        String valueBefore = slider.getAttribute("value");
+
+        Actions actions=new Actions(driver);
+        actions.moveToElement(slider).click().dragAndDropBy(slider,120,0).build().perform();
+        String valueAfter = slider.getAttribute("value");
+        Assert.assertNotEquals(valueBefore,valueAfter);
 
     }
     @Test

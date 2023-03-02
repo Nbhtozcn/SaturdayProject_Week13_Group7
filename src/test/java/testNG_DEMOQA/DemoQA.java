@@ -1,9 +1,9 @@
 package testNG_DEMOQA;
 
 import Utilities.UtilityClass;
-import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
-import org.openqa.selenium.WebElement;
+import io.github.bonigarcia.wdm.WebDriverManager;
+import org.openqa.selenium.*;
+import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -15,6 +15,12 @@ import java.time.Duration;
 public class DemoQA extends UtilityClass {
     @Test
     void testID1(){
+        WebDriverManager.chromedriver().setup();
+        WebDriver driver=new ChromeDriver();
+        driver.get("https://demoqa.com/");
+        String expectedTitle="DEMOQA";
+        String actualTitle=driver.getTitle();
+        Assert.assertEquals(actualTitle,expectedTitle);
 
     }
     @Test
@@ -27,6 +33,22 @@ public class DemoQA extends UtilityClass {
     }
     @Test
     void testID4(){
+        WebDriverManager.chromedriver().setup();
+        WebDriver driver=new ChromeDriver();
+        driver.get("https://demoqa.com/");
+        JavascriptExecutor js= (JavascriptExecutor) driver;
+        js.executeScript("window.scrollBy(0, 1000)"); //scrolled down
+        WebDriverWait wait=new WebDriverWait(driver, Duration.ofSeconds(10));
+
+        WebElement widget= driver.findElement(By.xpath("//h5[text()= 'Widgets']"));
+        widget.click();
+
+        WebElement tollTips=driver.findElement(By.xpath("//span[text()='Tool Tips']"));
+        tollTips.click();
+        String ExpectedUrl="https://demoqa.com/tooltip/ ";
+        String actualUrl=driver.getCurrentUrl();
+        Assert.assertEquals(actualUrl,ExpectedUrl);
+
 
     }
     @Test

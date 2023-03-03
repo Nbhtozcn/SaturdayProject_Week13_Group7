@@ -27,17 +27,16 @@ public class DemoQA extends UtilityClass {
     }
     @Test
     void testID2(){
-        // Navigate to the demoqa.com website
         driver.get("https://demoqa.com/");
+        JavascriptExecutor js= (JavascriptExecutor) driver;
+        js.executeScript("window.scrollBy(0, 1000)"); //scrolled down
+        WebElement interactionsButton= driver.findElement(By.xpath("//h5[contains(text(), 'Interactions')]/.."));
+        interactionsButton.click();
+        String actualUrl=driver.getCurrentUrl();
+        System.out.println(actualUrl);
+        String expectedUrl="https://demoqa.com/interaction/";
+        System.out.println(actualUrl.equals(expectedUrl));
 
-        // Click on the "interaction" button
-        driver.findElement(By.xpath("//a[text()='Interactions']")).click();
-
-        // Get the current URL
-        String currentUrl = driver.getCurrentUrl();
-
-        // Print the current URL to the console
-        System.out.println("Current URL: " + currentUrl);
     }
     @Test
     void testID3(){
@@ -123,35 +122,22 @@ public class DemoQA extends UtilityClass {
     @Test
     void testID7(){
         driver.get("https://demoqa.com/selectable/");
-
-        // Find the selectable list
-        WebElement selectableList = driver.findElement(By.id("selectable"));
-
-        //Use Actions class to simulate user actions
-        Actions actions = new Actions(driver);
-
-        //Press the control key and click on the first 3 items
-        actions.keyDown(Keys.CONTROL)
-                .click(selectableList.findElement(By.xpath("//li[@class='mt-2 list-group-item list-group-item-action' and text()='Cras justo odio']")))
-                .click(selectableList.findElement(By.xpath(".//li[2]")))
-                .click(selectableList.findElement(By.xpath(".//li[3]")))
-                .keyUp(Keys.CONTROL)
-                .perform();
-
-        // Click on the second item again to deselect others
-        actions.click(selectableList.findElement(By.xpath(".//li[2]")))
-                .perform();
-
-        // Verify that only the second item is highlighted
-        boolean item1Highlighted = selectableList.findElement(By.xpath(".//li[1]")).getAttribute("class").contains("ui-selected");
-        boolean item2Highlighted = selectableList.findElement(By.xpath(".//li[2]")).getAttribute("class").contains("ui-selected");
-        boolean item3Highlighted = selectableList.findElement(By.xpath(".//li[3]")).getAttribute("class").contains("ui-selected");
-
-        if (!item1Highlighted && item2Highlighted && !item3Highlighted) {
-            System.out.println("Selection test passed!");
-        } else {
-            System.out.println("Selection test failed!");
-        }
+        WebElement item1= driver.findElement(By.xpath("//li[text()='Cras justo odio']"));
+        WebElement item2= driver.findElement(By.xpath("//li[text()='Dapibus ac facilisis in']"));
+        WebElement item3= driver.findElement(By.xpath("//li[text()='Morbi leo risus']"));
+        Actions actions=new Actions(driver);
+        String item1BackgroundColorBefore=item1.getCssValue("background-color");
+        String item2BackgroundColorBefore=item2.getCssValue("background-color");
+        String item3BackgroundColorBefore=item3.getCssValue("background-color");
+        Action click3Items=actions.moveToElement(item1).keyDown(Keys.COMMAND).click(item1).click(item2).click(item3).click(item2).release().build();
+        click3Items.perform();
+        wait(3);
+        String item1BackgroundColorAfter=item1.getCssValue("background-color");
+        String item2BackgroundColorAfter=item2.getCssValue("background-color");
+        String item3BackgroundColorAfter=item3.getCssValue("background-color");
+        Assert.assertEquals(item1BackgroundColorBefore,item1BackgroundColorAfter);
+        Assert.assertNotEquals(item2BackgroundColorBefore,item2BackgroundColorAfter);
+        Assert.assertEquals(item3BackgroundColorBefore,item3BackgroundColorAfter);
     }
     @Test
     void testID8(){

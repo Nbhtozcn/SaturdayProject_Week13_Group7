@@ -67,7 +67,7 @@ public class DemoQA extends UtilityClass {
 
         Assert.assertNotEquals(colorAfterSelect,colorBeforeSelect, "Test is not successful");
 
-        quitDriver(3);
+
 
     }
     @Test
@@ -167,7 +167,7 @@ public class DemoQA extends UtilityClass {
         Assert.assertEquals(afterHeight,expectedHeight, "The test is not successful");
         Assert.assertEquals(afterWidth,expectedWidth, "The test is not successful");
 
-        quitDriver(3);
+
 
 
     }

@@ -10,7 +10,6 @@ import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
->>> master
 import org.testng.annotations.Test;
 
 import java.time.Duration;
@@ -32,14 +31,8 @@ public class DemoQA extends UtilityClass {
     }
     @Test
     void testID3(){
-        public static void main(String[] args) {
-            // Set the path of the ChromeDriver executable
-            System.setProperty("webdriver.chrome.driver", "path/to/chromedriver");
 
-            // Create a new instance of the ChromeDriver
-            WebDriver driver = new ChromeDriver();
-
-            // Navigate to the demoqa.com website
+           // Navigate to the demoqa.com website
             driver.get("https://demoqa.com/");
 
             // Click on the "interaction" button
@@ -51,8 +44,6 @@ public class DemoQA extends UtilityClass {
             // Print the current URL to the console
             System.out.println("Current URL: " + currentUrl);
 
-            // Quit the driver
-            driver.quit();
     }
     @Test
     void testID4(){
@@ -154,12 +145,7 @@ public class DemoQA extends UtilityClass {
     }
     @Test
     void testID9(){
-        public static void main(String[] args) {
-            WebDriverManager.chromedriver().setup();
-
-            WebDriver driver = new ChromeDriver();
-
-            driver.get("https://demoqa.com/selectable/");
+        driver.get("https://demoqa.com/selectable/");
 
             // Find the selectable list
             WebElement selectableList = driver.findElement(By.id("selectable"));
@@ -190,9 +176,6 @@ public class DemoQA extends UtilityClass {
                 System.out.println("Selection test failed!");
             }
 
-            driver.quit();
-
-        }
     }
     @Test
     void testID10(){

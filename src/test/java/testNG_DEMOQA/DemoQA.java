@@ -8,11 +8,16 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.interactions.Action;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import java.time.Duration;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Random;
 
 public class DemoQA extends UtilityClass {
     @Test
@@ -160,9 +165,20 @@ public class DemoQA extends UtilityClass {
     }
     @Test
     void testID9(){
-
+        driver.get("https://demoqa.com/resizable/");
+        WebElement resizableBox= driver.findElement(By.id("resizable"));
+        int widthBefore=resizableBox.getSize().width;
+        wait(2);
+        //<span class="react-resizable-handle react-resizable-handle-se"></span>
+        WebElement element= driver.findElement(By.cssSelector("span[class='react-resizable-handle react-resizable-handle-se']"));
+       Actions actions=new Actions(driver);
+       Action dragAndPull=actions.moveToElement(element).clickAndHold().moveByOffset(0,100).build();
+       dragAndPull.perform();
+       int widthAfter=resizableBox.getSize().width;
+       Assert.assertEquals(widthAfter,widthBefore+200);
 
     }
+
     @Test
     void testID10(){
         driver.get("https://demoqa.com/resizable/");
@@ -238,14 +254,64 @@ public class DemoQA extends UtilityClass {
     }
 
 
-
-
-
-
     @Test
     void testID12(){
+        driver.get("https://demoqa.com/select-menu/");
+        WebElement selectOption = driver.findElement(By.xpath("//div[@class=' css-1wa3eu0-placeholder']"));
+        selectOption.click();
+        Actions actions = new Actions(driver);
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
+        wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//div[contains(text(),'Group 1, option 2')]")));
+        List<String> options = new ArrayList<>(Arrays.asList("Group 1, option 1","Group 1, option 2","Group 2, option 1","Group 2, option 2","A root option","Another root option"));
+        Random random = new Random();
+        String randomOption = options.get(random.nextInt(options.size()));
+        WebElement options1 = driver.findElement(By.xpath("//div[contains(text(),'"+randomOption+"')]"));
+        actions.moveToElement(options1).click().perform();
+
+
+        /**2*/
+        WebElement secondDropMenu= driver.findElement(By.id("selectOne"));
+        secondDropMenu.click();
+        Actions actions1 = new Actions(driver);
+        wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//div[contains(text(),'Mr.')]")));
+        List<String> selectOne = new ArrayList<>(Arrays.asList("Dr.","Mr.","Mrs.","Ms.","Prof.","Other"));
+        Random random1 = new Random();
+        String randomOption1 = selectOne.get(random1.nextInt(selectOne.size()));
+        WebElement options2 = driver.findElement(By.xpath("//div[contains(text(),'"+randomOption1+"')]"));
+        actions.moveToElement(options2).click().perform();
+
+        /**3*/
+        //<select id="oldSelectMenu">
+        WebElement oldStyleMenu=driver.findElement(By.id("oldSelectMenu"));
+        oldStyleMenu.click();
+        Select select=new Select(oldStyleMenu);
+        List<WebElement> optionsOldMenu = select.getOptions();
+        Random rand = new Random();
+        int index = rand.nextInt(optionsOldMenu.size());
+        select.selectByIndex(index);
+        oldStyleMenu.click();
+
+        /**4*/
+
+        WebElement multiMenu=driver.findElement(By.cssSelector("div[class=' css-1wa3eu0-placeholder']"));
+        multiMenu.click();
+        Actions actions2=new Actions(driver);
+        wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//div[text()='Blue']")));
+        actions2.moveToElement(driver.findElement(By.xpath("//div[text()='Blue']"))).click().perform();
+        actions2.moveToElement(driver.findElement(By.xpath("//div[text()='Red']"))).click().perform();
+        actions2.moveToElement(driver.findElement(By.xpath("//div[text()='Black']"))).click().perform();
+        actions2.moveToElement(driver.findElement(By.xpath("//div[text()='Green']"))).click().perform();
+
+        /**5*/
+        //<select multiple="" name="cars" id="cars"><option value="volvo">Volvo</option><option value="saab">Saab</option><option value="opel">Opel</option><option value="audi">Audi</option></select>
+
+        WebElement standardMultiSelect=driver.findElement(By.id("cars"));
+        Select select1=new Select(standardMultiSelect);
+        select1.selectByIndex(2);
+
 
     }
+
     @Test
     void testID13() {
         //Go to Url
@@ -390,6 +456,8 @@ public class DemoQA extends UtilityClass {
        // Assert.assertNotEquals(currentMonthAndYear,expectedDate);
 
     }
+
+
 
 
 }

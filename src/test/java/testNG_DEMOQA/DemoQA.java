@@ -45,6 +45,22 @@ public class DemoQA extends UtilityClass {
     }
     @Test
     void testID3(){
+        driver.get("https://demoqa.com/");
+
+        WebElement interactionOption = driver.findElement(By.xpath("//div[@class='card mt-4 top-card'][5]"));
+        interactionOption.click();
+
+
+        JavascriptExecutor js = (JavascriptExecutor) driver;
+        js.executeScript("window.scrollBy(0,500)");
+
+        WebElement resizeable = driver.findElement(By.xpath("//span[text()='Resizable']"));
+        resizeable.click();
+
+        String actualUrl = driver.getCurrentUrl();
+        String expectedUrl = "https://demoqa.com/resizable/";
+
+        Assert.assertEquals(actualUrl,expectedUrl, "The test is not successful");
 
 
 
@@ -394,7 +410,21 @@ public class DemoQA extends UtilityClass {
         }
     @Test
     void testID16(){
+        driver.get("https://demoqa.com/date-picker/");
 
+        WebElement inputDate = driver.findElement(By.id("datePickerMonthYearInput"));
+        inputDate.click();
+
+        JavascriptExecutor js = (JavascriptExecutor) driver;
+        js.executeScript("window.scrollBy(0,300)");
+
+        WebElement todayDate = driver.findElement(By.xpath("//div[@class='react-datepicker__week']//div[@tabindex='0']"));
+        String todayDateColor = todayDate.getCssValue("background-color");
+
+        WebElement anotherDate = driver.findElement(By.xpath("//div[@class='react-datepicker__week']//div[@tabindex='-1']"));
+        String anotherDateColor = anotherDate.getCssValue("background-color");
+
+        Assert.assertNotEquals(todayDateColor,anotherDateColor,"Test is not successful");
     }
     @Test
     void testID17(){

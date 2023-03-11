@@ -330,40 +330,28 @@ public class DemoQA extends UtilityClass {
 
     @Test
     void testID13() {
-        //Go to Url
-        driver.get("https://demoqa.com/menu/#");
+        driver.get("https://demoqa.com/menu/");
+        //Locate the element from li not from the a tag
+        WebElement item2 = driver.findElement(By.xpath("(//ul[@id='nav']//li)[2]"));
 
-        //Locate the main_item_2
-        WebElement main_item_2 = driver.findElement(By.xpath("//a[contains(text(),'Main Item 2')]"));
+        //get background color before
+        String backgroundColorBefore = item2.getCssValue("background");
+        //hover over it
         Actions actions = new Actions(driver);
-        //Locate the SubSublist
-        WebElement SubSubList = driver.findElement(By.xpath("//a[contains(text(),'SUB SUB LIST »')]"));
+        Action hoverOver = actions.moveToElement(item2).build();
+        hoverOver.perform();
+        //get background color after
+        String backgroundColorAfter = item2.getCssValue("background");
+        //check if background has changed
+        Assert.assertNotEquals(backgroundColorBefore, backgroundColorAfter);
 
-
-        String beforeClickonMainItemColor = main_item_2.getCssValue("background-color");
-        //With actions move to mouse to the element
-        actions.moveToElement(main_item_2).build().perform();
-
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-        wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//a[contains(text(),'SUB SUB LIST »')]")));
-
-        String afterClickonMainItemcolor = main_item_2.getCssValue("background-color");
-
-
-        SubSubList.click();
-
-
-        WebElement SubSubItem2 = driver.findElement(By.xpath("//a[contains(text(),'Sub Sub Item 1')]"));
-        wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//a[contains(text(),'Sub Sub Item 1')]")));
-        SubSubItem2.click();
-
-        System.out.println("Before " + beforeClickonMainItemColor);
-        System.out.println("After " + afterClickonMainItemcolor);
-        Assert.assertEquals(SubSubList.isDisplayed(), true);
-        Assert.assertEquals(SubSubItem2.isDisplayed(), true);
-//        Assert.assertNotEquals(beforeClickonMainItemColor,afterClickonMainItemcolor);
-
-
+        //find all child elements of this item2
+        List<WebElement> childOfItem2 = item2.findElements(By.xpath("./child::*"));
+        // iterate child elements
+        for (WebElement e : childOfItem2) {
+            //check if each of them displayed
+            Assert.assertTrue(e.isDisplayed());
+        }
     }
 
 
